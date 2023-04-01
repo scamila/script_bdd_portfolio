@@ -1,0 +1,147 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`usuario` (
+  `id` INT NOT NULL,
+  `nombreUsuario` VARCHAR(45) NULL,
+  `contrasenia` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`persona`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`persona` (
+  `id` INT NOT NULL,
+  `apellido` VARCHAR(45) NULL,
+  `nombre` VARCHAR(45) NULL,
+  `numeroDeDocumento` VARCHAR(45) NULL,
+  `tipoDeDocumento` VARCHAR(45) NULL,
+  `usuario_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `usuario_id`),
+  INDEX `fk_persona_usuario_idx` (`usuario_id` ASC) VISIBLE,
+  CONSTRAINT `fk_persona_usuario`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `mydb`.`usuario` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`domicilio`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`domicilio` (
+  `id` INT NOT NULL,
+  `altura` VARCHAR(45) NULL,
+  `calle` VARCHAR(45) NULL,
+  `piso` INT NULL,
+  `ciudad` VARCHAR(45) NULL,
+  `persona_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `persona_id`),
+  INDEX `fk_domicilio_persona1_idx` (`persona_id` ASC) VISIBLE,
+  CONSTRAINT `fk_domicilio_persona1`
+    FOREIGN KEY (`persona_id`)
+    REFERENCES `mydb`.`persona` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`educacion`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`educacion` (
+  `id` INT NOT NULL,
+  `institucion` VARCHAR(45) NULL,
+  `titulo` VARCHAR(45) NULL,
+  `fechaInicio` DATE NULL,
+  `fechaFin` DATE NULL,
+  `persona_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `persona_id`),
+  INDEX `fk_educacion_persona1_idx` (`persona_id` ASC) VISIBLE,
+  CONSTRAINT `fk_educacion_persona1`
+    FOREIGN KEY (`persona_id`)
+    REFERENCES `mydb`.`persona` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`experiencia_laboral`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`experiencia_laboral` (
+  `id` INT NOT NULL,
+  `nombrePuesto` VARCHAR(45) NULL,
+  `detalle` VARCHAR(45) NULL,
+  `fechaInicio` DATE NULL,
+  `fechaFin` DATE NULL,
+  `empresa` VARCHAR(45) NULL,
+  `persona_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `persona_id`),
+  INDEX `fk_experiencia_laboral_persona1_idx` (`persona_id` ASC) VISIBLE,
+  CONSTRAINT `fk_experiencia_laboral_persona1`
+    FOREIGN KEY (`persona_id`)
+    REFERENCES `mydb`.`persona` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`proyecto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`proyecto` (
+  `id` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `detalle` VARCHAR(45) NULL,
+  `fecha` DATE NULL,
+  `enlaceProyecto` VARCHAR(45) NULL,
+  `persona_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `persona_id`),
+  INDEX `fk_proyecto_persona1_idx` (`persona_id` ASC) VISIBLE,
+  CONSTRAINT `fk_proyecto_persona1`
+    FOREIGN KEY (`persona_id`)
+    REFERENCES `mydb`.`persona` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`tecnologia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`tecnologia` (
+  `id` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `porcentajeDominio` FLOAT NULL,
+  `persona_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `persona_id`),
+  INDEX `fk_tecnologia_persona1_idx` (`persona_id` ASC) VISIBLE,
+  CONSTRAINT `fk_tecnologia_persona1`
+    FOREIGN KEY (`persona_id`)
+    REFERENCES `mydb`.`persona` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
